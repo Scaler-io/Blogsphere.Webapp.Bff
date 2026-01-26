@@ -1,0 +1,10 @@
+services:
+  blogsphere-webapp-bff-api:
+    image: ${DOCKER_REGISTRY-}blogsphere.webapp.bff.api
+    build:
+      context: .
+      dockerfile: Blogsphere.Webapp.Bff.API/Dockerfile
+
+networks:
+  blogsphere_dev_net:
+    external: true

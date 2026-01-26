@@ -1,0 +1,44 @@
+<Project>
+  <PropertyGroup>
+    <!-- Target Framework -->
+    
+    <!-- Language Features -->
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    
+    <!-- Assembly Information -->
+    <Company>Blogsphere</Company>
+    <Product>Blogsphere Webapp BFF</Product>
+    <Copyright>Copyright © 2025 Blogsphere</Copyright>
+    <Authors>Blogsphere Team</Authors>
+    
+    <!-- Build Configuration -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);CS1591</NoWarn> <!-- Missing XML comment for publicly visible type or member -->
+    
+    <!-- Versioning -->
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <!-- Common Package References (Optional - Uncomment as needed) -->
+  
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Serilog" Version="4.2.0" />
+    <PackageReference Include="Destructurama.Attributed" Version="5.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+  </ItemGroup>
+
+  <!-- Use ILogger from Serilog -->
+  <ItemGroup>
+    <Using Include="Serilog.ILogger" Alias="ILogger"/>
+  </ItemGroup>
+</Project>
+
+
+

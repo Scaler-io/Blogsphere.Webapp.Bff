@@ -1,0 +1,36 @@
+services:
+  blogsphere-webapp-bff-api:
+    container_name: Blogsphere.Webapp.Bff.Api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:8080
+      - AllowedHosts=*
+      - ApiDescription=Webapp BFF api description
+      - ApiOriginHost=localhost:8003
+      - AppConfigurations__ApplicationIdentifier=Blogsphere.Webapp.Bff.Api
+      - AppConfigurations__ApplicationEnvironment=Docker
+      - Logging__IncludeScopes=true
+      - "Logging__LogOutputTemplate=[{Timestamp:dd-MM-yyyy HH:mm:ss, fff}] {Level} {Properties} [CorrelationId:{CorrelationId}] [Machine: {MachineName}] [Caller:{CallerType}] [Member:{MemberName}] {Message}{NewLine}{Exception}{NewLine}"
+      - Logging__Console__Enabled=true
+      - Logging__Console__LogLevel=Debug
+      - Logging__Elastic__Enabled=true
+      - Logging__Elastic__LogLevel=Debug
+      - Elasticsearch__Uri=http://elasticsearch:9200
+      - IdentityGroupAccess__Authority=http://host.docker.internal:5000
+      - IdentityGroupAccess__Audience=blogsphere.webapp.bff.api
+      - Redis__InstanceName=Blogsphere.Webapp.Bff.Api
+      - ConnectionString__Redis=redis:6379
+      - Jaeger__Host=jaeger
+      - Jaeger__Port=6831
+      - ProviderSettings__UserApiSettings__BaseUrl=http://host.docker.internal:8000/user/
+      - ProviderSettings__UserApiSettings__ClientId=blogshere.user.api
+      - ProviderSettings__UserApiSettings__ClientSecret=${USER_API_CLIENT_SECRET}
+      - ProviderSettings__UserApiSettings__SubscriptionKey=${USER_API_SUBSCRIPTION_KEY}
+      - ProviderSettings__ApiGatewaySettings__BaseUrl=http://host.docker.internal:8000
+      - ProviderSettings__ApiGatewaySettings__ClientId=blogshere.apigateway.api
+      - ProviderSettings__ApiGatewaySettings__ClientSecret=${APIGATEWAY_CLIENT_SECRET}
+    restart: always
+    ports:
+      - 8003:8080
+    networks:
+      - blogsphere_dev_net
