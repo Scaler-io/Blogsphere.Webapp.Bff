@@ -17,16 +17,16 @@ namespace Blogsphere.Webapp.Bff.Domain.Models.Dtos
     public class ApiRouteTransformDto
     {
         public string Id { get; set; }
-        public string Name { get; set; }
-        public List<string> Values { get; set; }
-        public string Mode { get; set; }
+        public string PathPattern { get; set; }
         public bool IsActive { get; set; }
     }
 
     public class ApiRouteHeaderDto
     {
         public string Id { get; set; }
-        public string PathPattern { get; set; }
+        public string Name { get; set; }
+        public List<string> Values { get; set; }
+        public string Mode { get; set; }
         public bool IsActive { get; set; }
     }
 }
