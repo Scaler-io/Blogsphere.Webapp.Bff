@@ -1,7 +1,8 @@
-namespace Blogsphere.Webapp.Bff.Domain.Configurations;
-
-public class ElasticSearchOption
+namespace Blogsphere.Webapp.Bff.Domain.Configurations
 {
-    public const string OptionName = "ElasticSearch";
-    public string Uri { get; set; }
+    public class ElasticSearchOption
+    {
+        public const string OptionName = "ElasticSearch";
+        public string Uri { get; set; }
+    }
 }

@@ -1,16 +1,17 @@
 using Blogsphere.Webapp.Bff.Domain.Models.Enums;
 
-namespace Blogsphere.Webapp.Bff.Domain.Models.Core;
-
-public class ApiValidationResponse : ApiResponse
+namespace Blogsphere.Webapp.Bff.Domain.Models.Core
 {
-    public ApiValidationResponse(string errorMessage = "") : base(ErrorCode.BadRequest, errorMessage)
+    public class ApiValidationResponse : ApiResponse
     {
-        ErrorMessage = !string.IsNullOrEmpty(errorMessage) ? errorMessage : GetDefaultErrorMessage(Code);
+        public ApiValidationResponse(string errorMessage = "", string correlationId = null) : base(ErrorCode.BadRequest, errorMessage, correlationId)
+        {
+            ErrorMessage = !string.IsNullOrEmpty(errorMessage) ? errorMessage : GetDefaultErrorMessage(Code);
+        }
+        public List<FieldLevelError> Errors { get; set; }
+        protected override string GetDefaultErrorMessage(ErrorCode code)
+        {
+            return "Invalid data provided";
+        }
     }
-    public List<FieldLevelError> Errors { get; set; }  
-    protected override string GetDefaultErrorMessage(ErrorCode code)
-    {
-        return "Invalid data provided";
-    } 
-}   
+}

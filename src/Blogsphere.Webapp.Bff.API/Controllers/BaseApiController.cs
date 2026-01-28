@@ -25,12 +25,12 @@ namespace Blogsphere.Webapp.Bff.API.Controllers
         {
             if (result == null)
             {
-                return NotFound(new ApiResponse(ErrorCode.NotFound));
+                return NotFound(new ApiResponse(ErrorCode.NotFound, correlationId: RequestInformation.CorreationId));
             }
 
             if (result.IsSuccess && result.Data == null)
             {
-                return NotFound(new ApiResponse(ErrorCode.NotFound));
+                return NotFound(new ApiResponse(ErrorCode.NotFound, correlationId: RequestInformation.CorreationId));
             }
 
             if (result.IsSuccess && result.Data != null)
@@ -40,13 +40,13 @@ namespace Blogsphere.Webapp.Bff.API.Controllers
 
             return result.ErrorCode switch
             {
-                ErrorCode.BadRequest => BadRequest(new ApiValidationResponse(result.ErrorMessage)),
-                ErrorCode.InternalServerError => InternalServerError(new ApiExceptionResponse(result.ErrorMessage)),
-                ErrorCode.NotFound => NotFound(new ApiResponse(ErrorCode.NotFound, result.ErrorMessage)),
-                ErrorCode.Unauthorized => Unauthorized(new ApiResponse(ErrorCode.Unauthorized, result.ErrorMessage)),
-                ErrorCode.OperationFailed => BadRequest(new ApiResponse(ErrorCode.OperationFailed, result.ErrorMessage)),
-                ErrorCode.NotAllowed => BadRequest(new ApiResponse(ErrorCode.NotAllowed, result.ErrorMessage)),
-                _ => BadRequest(new ApiResponse(ErrorCode.BadRequest, result.ErrorMessage))
+                ErrorCode.BadRequest => BadRequest(new ApiValidationResponse(result.ErrorMessage, correlationId: RequestInformation.CorreationId)),
+                ErrorCode.InternalServerError => InternalServerError(new ApiExceptionResponse(result.ErrorMessage, correlationId: RequestInformation.CorreationId)),
+                ErrorCode.NotFound => NotFound(new ApiResponse(ErrorCode.NotFound, result.ErrorMessage, correlationId: RequestInformation.CorreationId)),
+                ErrorCode.Unauthorized => Unauthorized(new ApiResponse(ErrorCode.Unauthorized, result.ErrorMessage, correlationId: RequestInformation.CorreationId)),
+                ErrorCode.OperationFailed => BadRequest(new ApiResponse(ErrorCode.OperationFailed, result.ErrorMessage, correlationId: RequestInformation.CorreationId)),
+                ErrorCode.NotAllowed => BadRequest(new ApiResponse(ErrorCode.NotAllowed, result.ErrorMessage, correlationId: RequestInformation.CorreationId)),
+                _ => BadRequest(new ApiResponse(ErrorCode.BadRequest, result.ErrorMessage, correlationId: RequestInformation.CorreationId))
             };
 
         }

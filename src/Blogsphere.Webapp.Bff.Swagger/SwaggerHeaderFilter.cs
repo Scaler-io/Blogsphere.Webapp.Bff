@@ -1,25 +1,26 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Blogsphere.Webapp.Bff.Swagger;
-
-public class SwaggerHeaderFilter : IOperationFilter
+namespace Blogsphere.Webapp.Bff.Swagger
 {
-    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+    public class SwaggerHeaderFilter : IOperationFilter
     {
-        var headers = context.MethodInfo.GetCustomAttributes(true).OfType<SwaggerHeaderAttribute>();
-        operation.Parameters ??= [];
-
-        foreach(var header in headers)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            operation.Parameters.Add(new()
+            var headers = context.MethodInfo.GetCustomAttributes(true).OfType<SwaggerHeaderAttribute>();
+            operation.Parameters ??= [];
+
+            foreach(var header in headers)
             {
-                Name = header.Name,
-                In = ParameterLocation.Header,
-                Required = header.Required,
-                Schema = new OpenApiSchema { Type = header.Type ?? "string" },
-                Description = header.Description
-            });
+                operation.Parameters.Add(new()
+                {
+                    Name = header.Name,
+                    In = ParameterLocation.Header,
+                    Required = header.Required,
+                    Schema = new OpenApiSchema { Type = header.Type ?? "string" },
+                    Description = header.Description
+                });
+            }
         }
     }
 }

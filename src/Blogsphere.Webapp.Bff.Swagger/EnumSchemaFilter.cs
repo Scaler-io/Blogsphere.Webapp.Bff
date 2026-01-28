@@ -2,18 +2,19 @@ using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Blogsphere.Webapp.Bff.Swagger;
-
-public class EnumSchemaFilter : ISchemaFilter
+namespace Blogsphere.Webapp.Bff.Swagger
 {
-    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    public class EnumSchemaFilter : ISchemaFilter
     {
-        if(context.Type.IsEnum)
+        public void Apply(OpenApiSchema schema, SchemaFilterContext context)
         {
-            schema.Enum.Clear();
-            Enum.GetNames(context.Type)
-            .ToList()
-            .ForEach(name => schema.Enum.Add(new OpenApiString($"{name}")));
+            if(context.Type.IsEnum)
+            {
+                schema.Enum.Clear();
+                Enum.GetNames(context.Type)
+                .ToList()
+                .ForEach(name => schema.Enum.Add(new OpenApiString($"{name}")));
+            }
         }
     }
 }

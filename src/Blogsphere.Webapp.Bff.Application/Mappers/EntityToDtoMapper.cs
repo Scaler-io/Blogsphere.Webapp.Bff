@@ -14,10 +14,14 @@ namespace Blogsphere.Webapp.Bff.Application.Mappers
             CreateMap<Destination, DestinationDto>();
             CreateMap<ApiRoute, ClusterRouteDto>();
 
+
+            CreateMap<ApiRoute, ApiRouteDto>();
+            CreateMap<ApiRouteHeader, ApiRouteHeaderDto>();
+            CreateMap<ApiRouteTransform, ApiRouteTransformDto>();
+
             CreateMap<MetaData, MetaDataDto>()
             .ForMember(dest => dest.CreatedBy, opt => opt.Ignore()) // We will map the created by and updated by manually in the next step
             .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore()); // We will map the created by and updated by manually in the next step
-
             CreateMap<ManagementUserDetails, OperationaUserDetailsDto>();
         }
     }

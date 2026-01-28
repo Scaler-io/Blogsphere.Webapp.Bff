@@ -1,11 +1,10 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Blogsphere.Webapp.Bff.API.Middlewares;
 using Blogsphere.Webapp.Bff.Domain.Configurations;
 using Blogsphere.Webapp.Bff.Domain.Models.Core;
 using Blogsphere.Webapp.Bff.Swagger;
+using Blogsphere.Webapp.Bff.Swagger.Example.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -56,7 +55,7 @@ namespace Blogsphere.Webapp.Bff.API.DI
                 options.SubstituteApiVersionInUrl = true;
             });
 
-            services.AddSwaggerExamplesFromAssemblies();
+            services.AddSwaggerExamplesFromAssemblies(typeof(ValidationResponseExample).Assembly);
             services.AddSwaggerExamples();
             services.AddSwaggerGen(options =>
             {
@@ -91,6 +90,12 @@ namespace Blogsphere.Webapp.Bff.API.DI
                         ValidIssuer = identityGroupAccess.Authority,
                         ValidAudience = identityGroupAccess.Audience
                     };
+                });
+
+            services.AddAuthorizationBuilder()
+                .AddDefaultPolicy("BffApiPolicy", policy =>
+                {
+                    policy.RequireClaim("scope", "bffapi:manage");
                 });
 
             services.AddOpenTelemetry()

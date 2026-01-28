@@ -1,20 +1,20 @@
-namespace Blogsphere.Webapp.Bff.Domain.Entities.ApiGateway
+namespace Blogsphere.Webapp.Bff.Domain.Models.Dtos
 {
-    public class ApiRoute
+    public class ApiRouteDto
     {
         public string Id { get; set; }
         public string RouteId { get; set; }
         public string Path { get; set; }
         public List<string> Methods { get; set; }
         public string RateLimiterPolicy { get; set; }
-        public MetaData Metadata { get; set; }
+        public MetaDataDto Metadata { get; set; }
         public bool IsActive { get; set; }
         public string ClusterId { get; set; }
-        public List<ApiRouteHeader> Headers { get; set; }
-        public List<ApiRouteTransform> Transforms { get; set; }
+        public List<ApiRouteHeaderDto> Headers { get; set; }
+        public List<ApiRouteTransformDto> Transforms { get; set; }
     }
 
-    public class ApiRouteHeader
+    public class ApiRouteTransformDto
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -23,7 +23,7 @@ namespace Blogsphere.Webapp.Bff.Domain.Entities.ApiGateway
         public bool IsActive { get; set; }
     }
 
-    public class ApiRouteTransform
+    public class ApiRouteHeaderDto
     {
         public string Id { get; set; }
         public string PathPattern { get; set; }

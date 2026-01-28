@@ -1,21 +1,22 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Blogsphere.Webapp.Bff.Swagger;
-
-public class SwaggerBasePath : IDocumentFilter
+namespace Blogsphere.Webapp.Bff.Swagger
 {
-    public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+    public class SwaggerBasePath : IDocumentFilter
     {
-        var docVersion = swaggerDoc.Info.Version;
-        var groupName = context.ApiDescriptions
-        .Select(x => x.GroupName)
-        .FirstOrDefault(apiVersion => apiVersion.Equals(docVersion, StringComparison.OrdinalIgnoreCase));
-
-        if(groupName != null)
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {
-            swaggerDoc.Servers.Clear();
-            swaggerDoc.Servers.Add(new OpenApiServer { Url = $"/{groupName}" });
+            var docVersion = swaggerDoc.Info.Version;
+            var groupName = context.ApiDescriptions
+            .Select(x => x.GroupName)
+            .FirstOrDefault(apiVersion => apiVersion.Equals(docVersion, StringComparison.OrdinalIgnoreCase));
+
+            if(groupName != null)
+            {
+                swaggerDoc.Servers.Clear();
+                swaggerDoc.Servers.Add(new OpenApiServer { Url = $"/{groupName}" });
+            }
         }
     }
 }

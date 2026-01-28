@@ -1,11 +1,12 @@
-namespace Blogsphere.Webapp.Bff.Domain.Models.Enums;
-
-public enum ErrorCode
+namespace Blogsphere.Webapp.Bff.Domain.Models.Enums
 {
-    BadRequest,
-    InternalServerError,
-    OperationFailed,
-    NotAllowed,
-    NotFound,
-    Unauthorized
+    public enum ErrorCode
+    {
+        BadRequest,
+        InternalServerError,
+        OperationFailed,
+        NotAllowed,
+        NotFound,
+        Unauthorized
+    }
 }

@@ -1,8 +1,9 @@
 using Swashbuckle.AspNetCore.Filters;
 
-namespace Blogsphere.Webapp.Bff.Swagger.Example.Status;
-
-public class HealthCheckResultExample : IExamplesProvider<string>
+namespace Blogsphere.Webapp.Bff.Swagger.Example.Status
 {
-    public string GetExamples() => "Healthy";
+    public class HealthCheckResultExample : IExamplesProvider<string>
+    {
+        public string GetExamples() => "Healthy";
+    }
 }

@@ -1,8 +1,9 @@
-namespace Blogsphere.Webapp.Bff.Domain.Models.Constants;
-
-public class ApiProviderNames
+namespace Blogsphere.Webapp.Bff.Domain.Models.Constants
 {
-    public const string UserApi = "UserApi";
-    public const string ApiGateway = "ApiGateway";
-    public const string IdentityServer = "IdentityServer";
+    public class ApiProviderNames
+    {
+        public const string UserApi = "UserApi";
+        public const string ApiGateway = "ApiGateway";
+        public const string IdentityServer = "IdentityServer";
+    }
 }

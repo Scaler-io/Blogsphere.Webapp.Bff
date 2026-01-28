@@ -1,8 +1,9 @@
-namespace Blogsphere.Webapp.Bff.Domain.Models.Core;
-
-public class FieldLevelError
+namespace Blogsphere.Webapp.Bff.Domain.Models.Core
 {
-    public string Code { get; set; }
-    public string Message { get; set; }
-    public string Field { get; set; }    
+    public class FieldLevelError
+    {
+        public string Code { get; set; }
+        public string Message { get; set; }
+        public string Field { get; set; }    
+    }
 }

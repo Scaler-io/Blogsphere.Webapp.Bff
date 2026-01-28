@@ -1,23 +1,24 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Blogsphere.Webapp.Bff.Swagger;
-
-public class SwaggerRemoveVersionFromRoute : IDocumentFilter
+namespace Blogsphere.Webapp.Bff.Swagger
 {
-    public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+    public class SwaggerRemoveVersionFromRoute : IDocumentFilter
     {
-        var modifiedPaths = new OpenApiPaths();
-        foreach(var path in swaggerDoc.Paths)
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {
-            var pathWithoutVersion = path.Key[7..];
-            if (string.IsNullOrEmpty(pathWithoutVersion))
+            var modifiedPaths = new OpenApiPaths();
+            foreach(var path in swaggerDoc.Paths)
             {
-                pathWithoutVersion = "/";
+                var pathWithoutVersion = path.Key[7..];
+                if (string.IsNullOrEmpty(pathWithoutVersion))
+                {
+                    pathWithoutVersion = "/";
+                }
+                modifiedPaths.Add(pathWithoutVersion, path.Value);
             }
-            modifiedPaths.Add(pathWithoutVersion, path.Value);
-        }
 
-        swaggerDoc.Paths = modifiedPaths;
+            swaggerDoc.Paths = modifiedPaths;
+        }
     }
 }

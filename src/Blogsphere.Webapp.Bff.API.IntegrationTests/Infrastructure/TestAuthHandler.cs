@@ -24,6 +24,7 @@ namespace Blogsphere.Webapp.Bff.API.IntegrationTests.Infrastructure
                 new Claim("name", "test.user"),
                 new Claim("permissions", "[]"),
                 new Claim(ClaimTypes.Role, "[]"),
+                new Claim("scope", "bffapi:manage"),
             };
 
             var identity = new ClaimsIdentity(claims, SchemeName);

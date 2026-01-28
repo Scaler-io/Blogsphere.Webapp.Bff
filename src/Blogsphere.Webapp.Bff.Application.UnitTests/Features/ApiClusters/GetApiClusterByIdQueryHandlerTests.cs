@@ -1,4 +1,5 @@
 using Blogsphere.Webapp.Bff.Application.Contracts.ApiProvider;
+using Blogsphere.Webapp.Bff.Application.Services;
 using Blogsphere.Webapp.Bff.Application.Features.ApiClusters.Queries.GetApiClusterById;
 using Blogsphere.Webapp.Bff.Application.UnitTests.Common;
 using Blogsphere.Webapp.Bff.Domain.Entities;
@@ -65,10 +66,12 @@ namespace Blogsphere.Webapp.Bff.Application.UnitTests.Features.ApiClusters
                     JobTitle = "Updater"
                 }));
 
+            var metaDataUserEnricher = new MetaDataUserEnricher(logger.Object, userApiProvider.Object, mapper);
+
             var handler = new GetApiClusterByIdQueryHandler(
                 logger.Object,
                 apiGatewayProvider.Object,
-                userApiProvider.Object,
+                metaDataUserEnricher,
                 mapper);
 
             var result = await handler.Handle(new GetApiClusterByIdQuery(clusterId, requestInfo), CancellationToken.None);
@@ -98,10 +101,12 @@ namespace Blogsphere.Webapp.Bff.Application.UnitTests.Features.ApiClusters
                 .Setup(p => p.GetApiCLusterDetailsByIdAsync(clusterId, requestInfo, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Result<ApiCluster>.Failure(ErrorCode.NotFound, "not found"));
 
+            var metaDataUserEnricher = new MetaDataUserEnricher(logger.Object, userApiProvider.Object, mapper);
+
             var handler = new GetApiClusterByIdQueryHandler(
                 logger.Object,
                 apiGatewayProvider.Object,
-                userApiProvider.Object,
+                metaDataUserEnricher,
                 mapper);
 
             var result = await handler.Handle(new GetApiClusterByIdQuery(clusterId, requestInfo), CancellationToken.None);

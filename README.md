@@ -165,6 +165,13 @@ This repository is designed to grow. A typical flow to add a feature is:
 - **Swagger**
   - Add/extend examples and filters under `src/Blogsphere.Webapp.Bff.Swagger` as the API surface grows
 
+### Metadata user enrichment
+
+Some downstream entities provide metadata user IDs (e.g., `CreatedBy`, `UpdatedBy`). To avoid repeating “lookup user details and map into DTO metadata” logic across handlers, use the reusable enricher:
+
+- **Service**: `IMetaDataUserEnricher` (implementation: `MetaDataUserEnricher`)
+- **Usage**: call `EnrichAsync(source.MetaData, dto.MetaData, requestInformation, cancellationToken)` after mapping your DTO
+
 Suggested documentation hygiene as you add features:
 
 - Keep a running **“Endpoints”** list (method + route + short description) in this README.
