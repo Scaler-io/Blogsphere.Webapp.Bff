@@ -12,6 +12,7 @@ using Swashbuckle.AspNetCore.Filters;
 using Blogsphere.Webapp.Bff.Swagger.Example.Common;
 using Microsoft.AspNetCore.Authorization;
 using Blogsphere.Webapp.Bff.Application.Features.ApiRoute.Queries.GetApiRouteById;
+using Blogsphere.Webapp.Bff.Swagger.Example.ApiGateway;
 
 namespace Blogsphere.Webapp.Bff.API.Controllers.v2.ApiGateway
 {
@@ -30,6 +31,7 @@ namespace Blogsphere.Webapp.Bff.API.Controllers.v2.ApiGateway
         [SwaggerHeader("CorrelationId", Description = "Expected to be a valid and unique correlation id")]
         // 200
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiClusterDto))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ApiClusterResponseExample))]
         // 400
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiValidationResponse))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ValidationResponseExample))]
@@ -56,6 +58,7 @@ namespace Blogsphere.Webapp.Bff.API.Controllers.v2.ApiGateway
         [SwaggerHeader("CorrelationId", Description = "Expected to be a valid and unique correlation id")]
         // 200
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiRouteDto))]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ApiRouteResponseExample))]
         // 400
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiValidationResponse))]
         [SwaggerResponseExample(StatusCodes.Status400BadRequest, typeof(ValidationResponseExample))]
