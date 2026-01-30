@@ -15,7 +15,7 @@ concurrency:
   group: pipeline-${{ github.ref }}
   cancel-in-progress: true
 
-permissions: read-all 
+permissions: read-all
 
 jobs:
   build:
@@ -31,6 +31,8 @@ jobs:
     name: GitHub Release
     needs: [code_analysis]
     if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: write
     uses: ./.github/workflows/github-release.yml
 
   docker_build_push:
