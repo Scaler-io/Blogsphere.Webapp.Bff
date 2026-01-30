@@ -20,11 +20,12 @@ on:
         required: false
         default: "src/Blogsphere.Webapp.Bff.API/Blogsphere.Webapp.Bff.API.csproj"
 
-permissions: read-all
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -16,11 +16,12 @@ on:
         required: false
         default: "src/Blogsphere.Webapp.Bff.sln"
 
-permissions: read-all
-
 jobs:
   analysis:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4

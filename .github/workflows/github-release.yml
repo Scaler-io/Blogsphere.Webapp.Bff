@@ -7,8 +7,6 @@ on:
         description: Release tag created by the workflow
         value: ${{ jobs.release.outputs.release_tag }}
 
-permissions: read-all
-
 jobs:
   release:
     runs-on: ubuntu-latest
