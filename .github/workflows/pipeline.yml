@@ -1,0 +1,46 @@
+name: pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - "feature/**"
+      - "hotfix/**"
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: pipeline-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: read-all 
+
+jobs:
+  build:
+    name: Build
+    uses: ./.github/workflows/build.yml
+
+  code_analysis:
+    name: Code Analysis
+    needs: [build]
+    uses: ./.github/workflows/code-analysis.yml
+
+  github_release:
+    name: GitHub Release
+    needs: [code_analysis]
+    if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/github-release.yml
+
+  docker_build_push:
+    name: Docker Build & Push
+    needs: [github_release]
+    if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+    uses: ./.github/workflows/docker-build-push.yml
+    with:
+      image_name: ${{ vars.IMAGE_NAME }}
+      tag: ${{ needs.github_release.outputs.release_tag }}
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

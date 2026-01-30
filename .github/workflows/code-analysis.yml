@@ -1,0 +1,116 @@
+name: code-analysis
+
+on:
+  workflow_call:
+    inputs:
+      dotnet_version:
+        type: string
+        required: false
+        default: "8.0.x"
+      configuration:
+        type: string
+        required: false
+        default: "Release"
+      solution_path:
+        type: string
+        required: false
+        default: "src/Blogsphere.Webapp.Bff.sln"
+
+permissions: read-all
+
+jobs:
+  analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet_version }}
+
+      - name: Security Analysis - Vulnerable packages
+        shell: pwsh
+        run: |
+          Write-Host "Checking for vulnerable packages..."
+          dotnet restore "${{ inputs.solution_path }}"
+          dotnet list "${{ inputs.solution_path }}" package --vulnerable
+
+      - name: Code Quality Analysis
+        shell: pwsh
+        run: |
+          Write-Host "Running code quality checks..."
+          $buildOutput = dotnet build "${{ inputs.solution_path }}" --configuration "${{ inputs.configuration }}" --verbosity normal --no-restore 2>&1
+          $warnings = $buildOutput | Select-String "warning"
+          $errors = $buildOutput | Select-String "error"
+          $buildSuccess = $buildOutput | Select-String "0 Error\(s\)"
+
+          if (-not $buildSuccess) {
+            Write-Host "Build failed"
+            if ($errors) {
+              Write-Host "Errors:"
+              $errors | ForEach-Object { Write-Host "  $_" }
+            }
+            exit 1
+          }
+
+          if ($warnings) {
+            Write-Host "Warnings: $($warnings.Count)"
+          } else {
+            Write-Host "Warnings: 0"
+          }
+
+          Write-Host "Running analyzers..."
+          dotnet build "${{ inputs.solution_path }}" --configuration "${{ inputs.configuration }}" --verbosity normal --no-restore --property:RunAnalyzersDuringBuild=true
+
+      - name: Dependency Analysis
+        shell: pwsh
+        run: |
+          Write-Host "Analyzing dependencies..."
+          dotnet list "${{ inputs.solution_path }}" package
+          dotnet list "${{ inputs.solution_path }}" package --outdated
+
+      - name: Code Metrics + Report
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+
+          $csFiles = Get-ChildItem -Path "src" -Filter "*.cs" -Recurse -ErrorAction SilentlyContinue
+          $totalLines = 0
+          if ($csFiles) {
+            foreach ($file in $csFiles) {
+              $lines = Get-Content $file.FullName | Measure-Object -Line
+              $totalLines += $lines.Lines
+            }
+          }
+
+          Write-Host "Total C# files: $($csFiles.Count)"
+          Write-Host "Total C# lines: $totalLines"
+
+          $reportPath = "artifacts/code-analysis-report.csv"
+          $reportData = @()
+
+          $reportData += [PSCustomObject]@{
+            Category  = "Code Metrics"
+            Metric    = "Total C# Files"
+            Value     = $csFiles.Count
+            Timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+          }
+          $reportData += [PSCustomObject]@{
+            Category  = "Code Metrics"
+            Metric    = "Total Lines of C# code"
+            Value     = $totalLines
+            Timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+          }
+
+          $reportData | Export-Csv -Path $reportPath -NoTypeInformation
+          Write-Host "Report written to $reportPath"
+
+      - name: Upload analysis report
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-analysis-report
+          path: artifacts/code-analysis-report.csv
+          if-no-files-found: error
+          retention-days: 14
