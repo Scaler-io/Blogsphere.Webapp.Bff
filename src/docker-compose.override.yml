@@ -17,6 +17,7 @@ services:
       - Logging__Elastic__LogLevel=Debug
       - Elasticsearch__Uri=http://elasticsearch:9200
       - IdentityGroupAccess__Authority=http://host.docker.internal:5000
+      - IdentityGroupAccess__ValidateDiscoveryIssuerName=false
       - IdentityGroupAccess__Audience=blogsphere.webapp.bff.api
       - Redis__InstanceName=Blogsphere.Webapp.Bff.Api
       - ConnectionString__Redis=redis:6379
@@ -27,7 +28,7 @@ services:
       - ProviderSettings__UserApiSettings__ClientSecret=${USER_API_CLIENT_SECRET}
       - ProviderSettings__UserApiSettings__SubscriptionKey=${USER_API_SUBSCRIPTION_KEY}
       - ProviderSettings__ApiGatewaySettings__BaseUrl=http://host.docker.internal:8000
-      - ProviderSettings__ApiGatewaySettings__ClientId=blogshere.apigateway.api
+      - ProviderSettings__ApiGatewaySettings__ClientId=blogsphere.apigateway.api
       - ProviderSettings__ApiGatewaySettings__ClientSecret=${APIGATEWAY_CLIENT_SECRET}
     restart: always
     ports:

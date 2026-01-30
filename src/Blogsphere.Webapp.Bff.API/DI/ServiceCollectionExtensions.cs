@@ -83,12 +83,12 @@ namespace Blogsphere.Webapp.Bff.API.DI
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = false,
+                        ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateIssuerSigningKey = true,
                         ClockSkew = TimeSpan.Zero,
-                        ValidIssuer = identityGroupAccess.Authority,
-                        ValidAudience = identityGroupAccess.Audience
+                        ValidAudience = identityGroupAccess.Audience,
+                        ValidIssuers = [identityGroupAccess.Authority, "http://localhost:5000"]
                     };
                 });
 
