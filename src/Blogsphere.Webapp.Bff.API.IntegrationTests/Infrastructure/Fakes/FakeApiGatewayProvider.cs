@@ -35,5 +35,19 @@ namespace Blogsphere.Webapp.Bff.API.IntegrationTests.Infrastructure.Fakes
 
             return Task.FromResult(Result<ApiCluster>.Success(cluster));
         }
+
+        public Task<Result<ApiRoute>> GetApiRouteByIdAsync(string id, RequestInformation requestInformation, CancellationToken cancellationToken = default)
+        {
+            var route = new ApiRoute
+            {
+                Id = id,
+                Path = "/test-route",
+                Methods = ["GET", "POST", "PUT", "DELETE"],
+                IsActive = true,
+                ClusterId = "test-cluster",
+            };
+
+            return Task.FromResult(Result<ApiRoute>.Success(route));
+        }
     }
 }

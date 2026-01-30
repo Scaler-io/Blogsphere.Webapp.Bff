@@ -1,0 +1,62 @@
+name: build
+
+on:
+  workflow_call:
+    inputs:
+      dotnet_version:
+        type: string
+        required: false
+        default: "8.0.x"
+      configuration:
+        type: string
+        required: false
+        default: "Release"
+      solution_path:
+        type: string
+        required: false
+        default: "src/Blogsphere.Webapp.Bff.sln"
+      api_project_path:
+        type: string
+        required: false
+        default: "src/Blogsphere.Webapp.Bff.API/Blogsphere.Webapp.Bff.API.csproj"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet_version }}
+
+      - name: Restore
+        run: dotnet restore "${{ inputs.solution_path }}"
+
+      - name: Build
+        run: dotnet build "${{ inputs.solution_path }}" -c "${{ inputs.configuration }}" --no-restore
+
+      - name: Test
+        run: dotnet test "${{ inputs.solution_path }}" -c "${{ inputs.configuration }}" --no-build
+
+      - name: Publish API
+        run: dotnet publish "${{ inputs.api_project_path }}" -c "${{ inputs.configuration }}" -o ./artifacts/publish /p:UseAppHost=false
+
+      - name: Zip publish output
+        run: |
+          cd ./artifacts/publish
+          zip -r ../build-output.zip .
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            artifacts/build-output.zip
+          if-no-files-found: error
+          retention-days: 14
