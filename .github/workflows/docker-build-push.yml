@@ -26,6 +26,7 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    environment: Docker
     permissions:
       contents: read
     steps:
