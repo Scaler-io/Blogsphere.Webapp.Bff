@@ -21,11 +21,17 @@ permissions:
 jobs:
   build:
     name: Build
+    permissions:
+      contents: read
+      actions: write
     uses: ./.github/workflows/build.yml
 
   code_analysis:
     name: Code Analysis
     needs: [build]
+    permissions:
+      contents: read
+      actions: write
     uses: ./.github/workflows/code-analysis.yml
 
   github_release:
