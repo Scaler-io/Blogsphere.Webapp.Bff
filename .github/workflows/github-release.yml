@@ -10,6 +10,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: Docker
     permissions:
       contents: write
     outputs:

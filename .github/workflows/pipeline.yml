@@ -42,7 +42,6 @@ jobs:
     name: GitHub Release
     needs: [code_analysis]
     if: ${{ github.event_name == 'pull_request' }}
-    environment: Docker
     permissions:
       contents: write
     uses: ./.github/workflows/github-release.yml
@@ -51,7 +50,6 @@ jobs:
     name: Docker Build & Push
     needs: [github_release]
     if: ${{ github.event_name == 'pull_request' }}
-    environment: Docker
     uses: ./.github/workflows/docker-build-push.yml
     with:
       image_name: ${{ vars.IMAGE_NAME }}
