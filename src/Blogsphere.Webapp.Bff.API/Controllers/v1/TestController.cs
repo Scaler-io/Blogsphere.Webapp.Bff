@@ -6,6 +6,8 @@ using Blogsphere.Webapp.Bff.Application.Extensions;
 using Blogsphere.Webapp.Bff.Application.Contracts.ApiProvider;
 using MediatR;
 using Blogsphere.Webapp.Bff.Application.Features.ApiClusters.Queries.GetApiClusterById;
+using Blogsphere.Webapp.Bff.Domain.Models.Core;
+using Blogsphere.Webapp.Bff.Domain.Models.Enums;
 
 namespace Blogsphere.Webapp.Bff.API.Controllers.v1
 {
@@ -21,7 +23,7 @@ namespace Blogsphere.Webapp.Bff.API.Controllers.v1
         public async Task<IActionResult> Get(CancellationToken cancellationToken)
         {
             Logger.Here().MethodEntered();
-            var result = await _mediator.Send(new GetApiClusterByIdQuery("0c15927e-4453-47d6-b0ab-04658351c4e8", RequestInformation), cancellationToken);
+            var result = await _apiGatewayProvider.GetApiProductsAsync(RequestInformation, cancellationToken);
             Logger.Here().MethodExited();
             return OkOrFailure(result);
         }

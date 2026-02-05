@@ -6,6 +6,7 @@ namespace Blogsphere.Webapp.Bff.Domain.Configurations
         public UserApiSettings UserApiSettings { get; set; }
         public ApiGatewaySettings ApiGatewaySettings { get; set; }
         public BffApiSettings BffApiSettings { get; set; }
+        public SearchApiSettings SearchApiSettings { get; set; }
     }
 
     public class ApiSettings
@@ -16,9 +17,10 @@ namespace Blogsphere.Webapp.Bff.Domain.Configurations
         public string SubscriptionKey { get; set; }
     }
 
-    public class UserApiSettings : ApiSettings {}
+    public class UserApiSettings : ApiSettings { }
 
-    public class ApiGatewaySettings : ApiSettings {}
+    public class ApiGatewaySettings : ApiSettings { }
 
-    public class BffApiSettings : ApiSettings {}
+    public class BffApiSettings : ApiSettings { }
+    public class SearchApiSettings : ApiSettings { }
 }
