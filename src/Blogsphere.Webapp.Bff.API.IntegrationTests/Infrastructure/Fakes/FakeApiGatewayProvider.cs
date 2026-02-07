@@ -2,6 +2,7 @@ using Blogsphere.Webapp.Bff.Application.Contracts.ApiProvider;
 using Blogsphere.Webapp.Bff.Domain.Entities;
 using Blogsphere.Webapp.Bff.Domain.Entities.ApiGateway;
 using Blogsphere.Webapp.Bff.Domain.Models.Core;
+using Blogsphere.Webapp.Bff.Domain.Models.Dtos;
 
 namespace Blogsphere.Webapp.Bff.API.IntegrationTests.Infrastructure.Fakes
 {
@@ -34,6 +35,29 @@ namespace Blogsphere.Webapp.Bff.API.IntegrationTests.Infrastructure.Fakes
             };
 
             return Task.FromResult(Result<ApiCluster>.Success(cluster));
+        }
+
+        public Task<Result<ApiProductListDto>> GetApiProductsAsync(RequestInformation requestInformation, CancellationToken cancellationToken = default)
+        {
+            var apiProduts = new ApiProductListDto
+            {
+                ApiProducts = [
+                    new ApiProduct
+                    {
+                        ProductId = "1",
+                        ProductName = "Product 1",
+                        ProductDescription = "Product 1 description",
+                        SubscriptionCount = 1,
+                        SubscribedApiCount = 1,
+                        IsActive = true,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow,
+                    },
+                ],
+                TotalCount = 1,
+            };
+
+            return Task.FromResult(Result<ApiProductListDto>.Success(apiProduts));
         }
 
         public Task<Result<ApiRoute>> GetApiRouteByIdAsync(string id, RequestInformation requestInformation, CancellationToken cancellationToken = default)

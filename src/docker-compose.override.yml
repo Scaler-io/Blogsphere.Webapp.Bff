@@ -30,6 +30,8 @@ services:
       - ProviderSettings__ApiGatewaySettings__BaseUrl=http://host.docker.internal:8000
       - ProviderSettings__ApiGatewaySettings__ClientId=blogsphere.apigateway.api
       - ProviderSettings__ApiGatewaySettings__ClientSecret=${APIGATEWAY_CLIENT_SECRET}
+      - ProviderSettings__SearchApiSettings__BaseUrl=http://host.docker.internal:8000/search/
+      - ProviderSettings__SearchApiSettings__SubscriptionKey=${SEARCH_API_SUBSCRIPTION_KEY}
     restart: always
     ports:
       - 8003:8080

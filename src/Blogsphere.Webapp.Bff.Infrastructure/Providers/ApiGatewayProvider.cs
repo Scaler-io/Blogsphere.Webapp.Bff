@@ -4,6 +4,7 @@ using Blogsphere.Webapp.Bff.Application.Contracts.TokenExchange;
 using Blogsphere.Webapp.Bff.Domain.Entities.ApiGateway;
 using Blogsphere.Webapp.Bff.Domain.Models.Constants;
 using Blogsphere.Webapp.Bff.Domain.Models.Core;
+using Blogsphere.Webapp.Bff.Domain.Models.Dtos;
 using Blogsphere.Webapp.Bff.Domain.Models.Enums;
 using Newtonsoft.Json;
 
@@ -58,6 +59,43 @@ namespace Blogsphere.Webapp.Bff.Infrastructure.Providers
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
             var apiRoute = JsonConvert.DeserializeObject<ApiRoute>(content, _jsonSerializerSettings);
             return Result<ApiRoute>.Success(apiRoute);
+        }
+
+        public async Task<Result<ApiProductListDto>> GetApiProductsAsync(RequestInformation requestInformation, CancellationToken cancellationToken = default)
+        {
+            var apiGatewayHttpClient = await GetHttpClientAsync(requestInformation, scope: "apigateway:read");
+            if (apiGatewayHttpClient.DefaultRequestHeaders.Contains("CorrelationId"))
+            {
+                apiGatewayHttpClient.DefaultRequestHeaders.Remove("CorrelationId");
+            }
+
+            apiGatewayHttpClient.DefaultRequestHeaders.Add("CorrelationId", requestInformation.CorreationId);
+
+            var response = await apiGatewayHttpClient.GetAsync($"/api/v1/apiproduct?page=1&pageSize=1", cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return Result<ApiProductListDto>.Failure(ErrorCode.OperationFailed, ErrorMessages.Operationfailed);
+            }
+            var content = await response.Content.ReadAsStringAsync(cancellationToken);
+            var apiProducts = JsonConvert.DeserializeObject<PaginatedResultV2<ApiProduct>>(content, _jsonSerializerSettings);
+
+            var allApiProducts = new List<ApiProduct>();
+            while (apiProducts.HasNextPage)
+            {
+                response = await apiGatewayHttpClient.GetAsync($"/api/v1/apiproduct?page={apiProducts.PageNumber + 1}", cancellationToken);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return Result<ApiProductListDto>.Failure(ErrorCode.OperationFailed, ErrorMessages.Operationfailed);
+                }
+                content = await response.Content.ReadAsStringAsync(cancellationToken);
+                apiProducts = JsonConvert.DeserializeObject<PaginatedResultV2<ApiProduct>>(content, _jsonSerializerSettings);
+                allApiProducts.AddRange(apiProducts.Items);
+            }
+            return Result<ApiProductListDto>.Success(new ApiProductListDto
+            {
+                ApiProducts = allApiProducts.AsReadOnly(),
+                TotalCount = apiProducts.TotalCount
+            });
         }
     }
 }
