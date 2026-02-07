@@ -2,7 +2,6 @@ using Blogsphere.Webapp.Bff.Application.Contracts.ApiProvider;
 using Blogsphere.Webapp.Bff.Application.Services;
 using Blogsphere.Webapp.Bff.Application.Features.ApiClusters.Queries.GetApiClusterById;
 using Blogsphere.Webapp.Bff.Application.UnitTests.Common;
-using Blogsphere.Webapp.Bff.Domain.Entities;
 using Blogsphere.Webapp.Bff.Domain.Entities.ApiGateway;
 using Blogsphere.Webapp.Bff.Domain.Entities.ManagementUsers;
 using Blogsphere.Webapp.Bff.Domain.Models.Core;
@@ -25,20 +24,7 @@ namespace Blogsphere.Webapp.Bff.Application.UnitTests.Features.ApiClusters
             var clusterId = "cluster-1";
             var requestInfo = TestHelpers.CreateRequestInformation("corr-1");
 
-            var apiCluster = new ApiCluster
-            {
-                Id = clusterId,
-                ClusterId = "c1",
-                Destinations = [],
-                Routes = [],
-                MetaData = new MetaData
-                {
-                    CreatedBy = "creator-id",
-                    UpdatedBy = "updater-id",
-                    CreatedAt = DateTime.UtcNow.AddDays(-1),
-                    UpdatedAt = DateTime.UtcNow
-                }
-            };
+            var apiCluster = TestData.ApiCluster(id: clusterId, createdBy: "creator-id", updatedBy: "updater-id");
 
             apiGatewayProvider
                 .Setup(p => p.GetApiCLusterDetailsByIdAsync(clusterId, requestInfo, It.IsAny<CancellationToken>()))
@@ -46,25 +32,13 @@ namespace Blogsphere.Webapp.Bff.Application.UnitTests.Features.ApiClusters
 
             userApiProvider
                 .Setup(p => p.GetManagementUserNameDetailsById("creator-id", requestInfo, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Result<ManagementUserDetails>.Success(new ManagementUserDetails
-                {
-                    Id = "creator-id",
-                    FullName = "Creator Name",
-                    Email = "creator@local",
-                    EmployeeId = "E1",
-                    JobTitle = "Creator"
-                }));
+                .ReturnsAsync(Result<ManagementUserDetails>.Success(
+                    TestData.ManagementUser("creator-id", "Creator Name", email: "creator@local", employeeId: "E1", jobTitle: "Creator")));
 
             userApiProvider
                 .Setup(p => p.GetManagementUserNameDetailsById("updater-id", requestInfo, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Result<ManagementUserDetails>.Success(new ManagementUserDetails
-                {
-                    Id = "updater-id",
-                    FullName = "Updater Name",
-                    Email = "updater@local",
-                    EmployeeId = "E2",
-                    JobTitle = "Updater"
-                }));
+                .ReturnsAsync(Result<ManagementUserDetails>.Success(
+                    TestData.ManagementUser("updater-id", "Updater Name", email: "updater@local", employeeId: "E2", jobTitle: "Updater")));
 
             var metaDataUserEnricher = new MetaDataUserEnricher(logger.Object, userApiProvider.Object, mapper);
 
