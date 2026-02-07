@@ -9,9 +9,9 @@ namespace Blogsphere.Webapp.Bff.Infrastructure.Http
     /// </summary>
     public sealed class HostHeaderOverrideHandler : DelegatingHandler
     {
-        private readonly string? _hostHeaderOverride;
+        private readonly string _hostHeaderOverride;
 
-        public HostHeaderOverrideHandler(string? hostHeaderOverride)
+        public HostHeaderOverrideHandler(string hostHeaderOverride)
         {
             _hostHeaderOverride = string.IsNullOrWhiteSpace(hostHeaderOverride) ? null : hostHeaderOverride;
         }

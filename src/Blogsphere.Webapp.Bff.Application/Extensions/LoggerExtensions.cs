@@ -19,7 +19,7 @@ namespace Blogsphere.Webapp.Bff.Application.Extensions
             logger.Debug(LoggerConstants.MethodEntered);
         }
 
-        public static void MethodExited(this ILogger logger, object? withResult = null)
+        public static void MethodExited(this ILogger logger, object withResult = null)
         {
             logger.Debug(LoggerConstants.MethodExited);
             if (withResult is not null)

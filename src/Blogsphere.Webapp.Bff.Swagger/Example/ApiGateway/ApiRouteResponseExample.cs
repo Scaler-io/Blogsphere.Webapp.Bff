@@ -12,7 +12,11 @@ namespace Blogsphere.Webapp.Bff.Swagger.Example.ApiGateway
             Path = "/user/healthcheck",
             Methods = ["GET"],
             IsActive = true,
-            ClusterId = "usersvc",
+            ClusterDetails = new BasicApiClusterDetailsDto
+            {
+                Id = "usersvc",
+                ClusterId = "usersvc"
+            },
             Headers = [
                 new ApiRouteHeaderDto
                 {
