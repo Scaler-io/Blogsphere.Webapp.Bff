@@ -1,5 +1,3 @@
-using System.Net.Http;
-
 namespace Blogsphere.Webapp.Bff.Infrastructure.Http
 {
     /// <summary>
@@ -7,14 +5,9 @@ namespace Blogsphere.Webapp.Bff.Infrastructure.Http
     /// This is useful in local Docker setups where connectivity uses host.docker.internal
     /// but IdentityServer issuer/host-based validation must remain localhost.
     /// </summary>
-    public sealed class HostHeaderOverrideHandler : DelegatingHandler
+    public sealed class HostHeaderOverrideHandler(string? hostHeaderOverride) : DelegatingHandler
     {
-        private readonly string? _hostHeaderOverride;
-
-        public HostHeaderOverrideHandler(string? hostHeaderOverride)
-        {
-            _hostHeaderOverride = string.IsNullOrWhiteSpace(hostHeaderOverride) ? null : hostHeaderOverride;
-        }
+        private readonly string _hostHeaderOverride = string.IsNullOrWhiteSpace(hostHeaderOverride) ? null : hostHeaderOverride;
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
