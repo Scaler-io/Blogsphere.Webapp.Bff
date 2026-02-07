@@ -42,6 +42,14 @@ namespace Blogsphere.Webapp.Bff.Infrastructure.DI
                 client.Timeout = TimeSpan.FromSeconds(30);
             });
 
+            services.AddHttpClient(ApiProviderNames.SearchApi, client =>
+            {
+                client.BaseAddress = new Uri(providerConfiguration.SearchApiSettings.BaseUrl);
+                client.DefaultRequestHeaders.Add("ocp-apim-subscriptionkey", providerConfiguration.SearchApiSettings.SubscriptionKey);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.Timeout = TimeSpan.FromSeconds(30);
+            });
+
             services.AddTransient<IUserApiProvider>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger>();
@@ -66,6 +74,17 @@ namespace Blogsphere.Webapp.Bff.Infrastructure.DI
                     ApiProviderNames.ApiGateway,
                     sp.GetRequiredService<JsonSerializerSettings>());
             });
+
+            services.AddTransient<ISearchApiProvider>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger>();
+                var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                var tokenExchangeService = sp.GetRequiredService<ITokenExchangeService>();
+                var cacheServiceFactory = sp.GetRequiredService<ICacheServiceFactory>();
+                var jsonSerializerSettings = sp.GetRequiredService<JsonSerializerSettings>();
+                return new SearchApiProvider(logger, httpClientFactory, tokenExchangeService, cacheServiceFactory, jsonSerializerSettings, ApiProviderNames.SearchApi);
+            });
+
             return services;
         }
     }

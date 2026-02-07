@@ -21,7 +21,7 @@ namespace Blogsphere.Webapp.Bff.Infrastructure.Providers
         protected readonly ICacheService _cacheService = cacheService;
 
 
-        protected async Task<HttpClient> GetHttpClientAsync(RequestInformation requestInformation, string scope, bool isPublic = false)
+        protected async Task<HttpClient> GetHttpClientAsync(RequestInformation requestInformation, string scope = default, bool isPublic = false)
         {
             try
             {
