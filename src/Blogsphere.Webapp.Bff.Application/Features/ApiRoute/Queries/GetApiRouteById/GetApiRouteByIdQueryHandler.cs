@@ -31,7 +31,17 @@ namespace Blogsphere.Webapp.Bff.Application.Features.ApiRoute.Queries.GetApiRout
                 return Result<ApiRouteDto>.Failure(apiRoute.ErrorCode, apiRoute.ErrorMessage);
             }
 
+            var apiCluster = await _apiGatewayProvider.GetApiCLusterDetailsByIdAsync(apiRoute.Data.ClusterId, request.RequestInformation, cancellationToken);
+
+            if (!apiCluster.IsSuccess)
+            {
+                _logger.Here().WithCorrelationId(request.RequestInformation.CorreationId).Error("Failed to get api cluster details by id {Id}", apiRoute.Data.ClusterId);
+                return Result<ApiRouteDto>.Failure(apiCluster.ErrorCode, apiCluster.ErrorMessage);
+            }
+
             var apiRouteDto = _mapper.Map<ApiRouteDto>(apiRoute.Data);
+            apiRouteDto.ClusterDetails.Id = apiCluster.Data.Id;
+            apiRouteDto.ClusterDetails.ClusterId = apiCluster.Data.ClusterId;
             apiRouteDto.Metadata ??= new MetaDataDto();
 
             var enrichMetaResult = await _metaDataUserEnricher.EnrichAsync(apiRoute.Data.Metadata, apiRouteDto.Metadata, request.RequestInformation, cancellationToken);

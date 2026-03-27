@@ -9,9 +9,15 @@ namespace Blogsphere.Webapp.Bff.Domain.Models.Dtos
         public string RateLimiterPolicy { get; set; }
         public MetaDataDto Metadata { get; set; }
         public bool IsActive { get; set; }
-        public string ClusterId { get; set; }
+        public BasicApiClusterDetailsDto ClusterDetails { get; set; } = new();
         public List<ApiRouteHeaderDto> Headers { get; set; }
         public List<ApiRouteTransformDto> Transforms { get; set; }
+    }
+
+    public class BasicApiClusterDetailsDto
+    {
+        public string Id { get; set; }
+        public string ClusterId { get; set; }
     }
 
     public class ApiRouteTransformDto

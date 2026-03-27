@@ -10,6 +10,6 @@ namespace Blogsphere.Webapp.Bff.Domain.Configurations
         /// Useful when running in Docker where the authority host differs from the issuer
         /// encoded in tokens (e.g., localhost vs host.docker.internal).
         /// </summary>
-        public string[]? ValidIssuers { get; set; }
+        public string[] ValidIssuers { get; set; }
     }
 }
