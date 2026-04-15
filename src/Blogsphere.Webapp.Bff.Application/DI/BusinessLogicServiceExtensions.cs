@@ -1,4 +1,7 @@
 using Blogsphere.Webapp.Bff.Application.Features.ApiClusters.Queries.GetApiClusterById;
+using Blogsphere.Webapp.Bff.Application.Features.Dashboard;
+using Blogsphere.Webapp.Bff.Application.Features.Dashboard.Analytics;
+using Blogsphere.Webapp.Bff.Application.Features.Dashboard.Scopes;
 using Blogsphere.Webapp.Bff.Application.Mappers;
 using Blogsphere.Webapp.Bff.Application.Contracts.Enrichment;
 using Blogsphere.Webapp.Bff.Application.Services;
@@ -13,6 +16,9 @@ namespace Blogsphere.Webapp.Bff.Application.DI
         {
             services.AddAutoMapper(typeof(EntityToDtoMapper).Assembly);
             services.AddMediatR(typeof(GetApiClusterByIdQuery).Assembly);
+            services.AddScoped<IDashboardScopeHandler, ApiManagementDashboardScopeHandler>();
+            services.AddScoped<IDashboardScopeHandler, UserManagementDashboardScopeHandler>();
+            services.AddScoped<IUserManagementDashboardAnalyticsContributor, ManagementUserDashboardAnalyticsContributor>();
             services.AddScoped<IMetaDataUserEnricher, MetaDataUserEnricher>();
             return services;
         }

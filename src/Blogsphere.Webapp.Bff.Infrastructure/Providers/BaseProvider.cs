@@ -15,7 +15,7 @@ namespace Blogsphere.Webapp.Bff.Infrastructure.Providers
         ICacheService cacheService,
         string apiProviderName)
     {
-        private readonly ILogger _logger = logger;
+        protected readonly ILogger _logger = logger;
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
         private readonly ITokenExchangeService _tokenExchangeService = tokenExchangeService;
         protected readonly ICacheService _cacheService = cacheService;
