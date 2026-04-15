@@ -19,8 +19,11 @@ concurrency:
   group: pipeline-${{ github.ref }}
   cancel-in-progress: true
 
+# Caller token limits what reusable workflows can do; include checks + actions for test reports and artifacts.
 permissions:
   contents: read
+  checks: write
+  actions: write
 
 jobs:
   build:
