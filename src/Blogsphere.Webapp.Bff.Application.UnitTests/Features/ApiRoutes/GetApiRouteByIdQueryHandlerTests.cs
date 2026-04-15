@@ -21,11 +21,17 @@ public class GetApiRouteByIdQueryHandlerTests
         var mapper = TestHelpers.Mapper;
 
         var routeId = "route-1";
+        var clusterId = "cluster-1";
         var requestInfo = TestHelpers.CreateRequestInformation("corr-1");
 
         var apiRoute = TestData.ApiRoute(id: routeId, createdBy: "creator-id", updatedBy: "updater-id");
 
         apiGatewayProvider.Setup(x => x.GetApiRouteByIdAsync(routeId, requestInfo, It.IsAny<CancellationToken>())).ReturnsAsync(Result<ApiRoute>.Success(apiRoute));
+
+        var apiCluster = TestData.ApiCluster(id: clusterId, createdBy: "creator-id", updatedBy: "updater-id");
+        apiGatewayProvider
+            .Setup(x => x.GetApiCLusterDetailsByIdAsync(clusterId, requestInfo, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result<ApiCluster>.Success(apiCluster));
 
         userApiProvider
                 .Setup(p => p.GetManagementUserNameDetailsById("creator-id", requestInfo, It.IsAny<CancellationToken>()))
