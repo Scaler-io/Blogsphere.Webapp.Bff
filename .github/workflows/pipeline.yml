@@ -28,8 +28,10 @@ permissions:
 jobs:
   build:
     name: Build
+    # Job-level permissions replace workflow defaults; must include checks for reusable build (test report action).
     permissions:
       contents: read
+      checks: write
       actions: write
     uses: ./.github/workflows/build.yml
 
