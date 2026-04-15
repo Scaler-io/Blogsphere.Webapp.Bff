@@ -26,6 +26,8 @@ jobs:
     permissions:
       contents: read
       actions: write
+      # Test report published as a Check run + job summary (publish-unit-test-result-action)
+      checks: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,7 +44,30 @@ jobs:
         run: dotnet build "${{ inputs.solution_path }}" -c "${{ inputs.configuration }}" --no-restore
 
       - name: Test
-        run: dotnet test "${{ inputs.solution_path }}" -c "${{ inputs.configuration }}" --no-build
+        run: |
+          dotnet test "${{ inputs.solution_path }}" -c "${{ inputs.configuration }}" --no-build \
+            --verbosity normal \
+            --results-directory "${{ github.workspace }}/TestResults" \
+            --logger "trx"
+
+      - name: Publish test results to GitHub
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: TestResults/**/*.trx
+          check_name: Test results
+          comment_mode: off
+          # Test step already fails the job; keep this step green so TRX still publish on failure.
+          fail_on: nothing
+
+      - name: Upload test result files (TRX)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-trx
+          path: TestResults/**/*.trx
+          if-no-files-found: ignore
+          retention-days: 14
 
       - name: Publish API
         run: dotnet publish "${{ inputs.api_project_path }}" -c "${{ inputs.configuration }}" -o ./artifacts/publish /p:UseAppHost=false

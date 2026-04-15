@@ -8,7 +8,11 @@ namespace Blogsphere.Webapp.Bff.Application.Contracts.ApiProvider
         Task<Result<PaginatedResult<ApiClusterSummary>>> SearchClustersAsync(PaginatedSearchRequest request, RequestInformation requestInformation, CancellationToken cancellationToken = default);
         Task<Result<PaginatedResult<ApiRouteSummary>>> SearchRoutesAsync(PaginatedSearchRequest request, RequestInformation requestInformation, CancellationToken cancellationToken = default);
 
+        Task<Result<PaginatedResult<ManagementUserSummary>>> SearchManagementUsersAsync(PaginatedSearchRequest request, RequestInformation requestInformation, CancellationToken cancellationToken = default);
+
         Task<Result<long>> GetTotalClustersCountAsync(RequestInformation requestInformation, CancellationToken cancellationToken = default);
         Task<Result<long>> GetTotalRoutesCountAsync(RequestInformation requestInformation, CancellationToken cancellationToken = default);
+
+        Task<Result<long>> GetTotalManagementUsersCountAsync(RequestInformation requestInformation, CancellationToken cancellationToken = default);
     }
 }
